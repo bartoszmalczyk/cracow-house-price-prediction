@@ -4,8 +4,9 @@ import random
 import pandas as pd
 from otodom_parser import parse_page
 
-PROGRESS_FILE = "last_page.txt"
-DATA_FILE = "otodom_scraped_data.csv"
+scraper_dir = os.path.dirname(os.path.abspath(__file__))
+PROGRESS_FILE = os.path.join(scraper_dir, 'last_page.txt')
+DATA_FILE = os.path.join(scraper_dir, 'otodom_scraped_data.csv')
 
 def save_stage(page):
     with open(PROGRESS_FILE, "w") as file:
