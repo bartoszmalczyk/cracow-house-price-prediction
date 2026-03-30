@@ -93,17 +93,17 @@ if __name__ == "__main__":
     for number, name in list(districts_dict.items()):
         print(f"{number}.{name}")
     location_nbr = int(input("YOUR ANSWER: "))
-    while location_nbr < 1 or location_nbr > 25:
+    while location_nbr < 1 or location_nbr > 24:
         print("You have inserted the wrong number!")
         location_nbr = int(input("YOUR ANSWER: "))
-    info[name] = [1]
+    info[location_nbr] = [1]
     os.system(clear_command)
 # VALIDATION HERE !!!
     print("Tell me if the house has (1 - YES), (0 - NO):")
     info['has_balkon'] = int(input("A balcony? "))
-    info['has_balkon'] = int(input("A parking slot? "))
-    info['has_balkon'] = int(input("An airconditioner? "))
-    
+    info['has_parking'] = int(input("A parking slot? "))
+    info['has_klima'] = int(input("An airconditioner? "))
+
     input_df = pd.DataFrame(info)
     prediction_array = engine.predict(input_df)
     estimated_price = prediction_array[0]
