@@ -1,6 +1,6 @@
 # Cracow House Price Prediction
 
-Welcome to the **Cracow House Price Prediction** project! This repository contains a complete, end-to-end Machine Learning pipeline designed to estimate real estate prices (apartments and houses) in Kraków, Poland. 
+Welcome to the **Cracow House Price Prediction** project! This repository contains a complete, end-to-end Machine Learning pipeline designed to estimate real estate prices (apartments and houses) in Kraków, Poland - https://cracow-house-price-prediction.streamlit.app. 
 
 The project covers everything from data collection (web scraping) and data processing, to model training, and finally serving price predictions via a Command Line Interface (CLI) and a web application.
 
@@ -74,7 +74,8 @@ To quickly get an estimate for a property, run the main interactive script:
     python3 main.py
    ```
 2. Using the Web App
-If you prefer a graphical UI, you can launch the app:
+If you prefer a graphical UI, you can launch the app locally or simply visit the site: https://cracow-house-price-prediction.streamlit.app:
     ```bash
     streamlit run app.py
     ```
+   
