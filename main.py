@@ -33,7 +33,7 @@ districts_dict = {
     23: 'district_Zwierzyniec', 
     24: 'district_Łagiewniki-Borek Fałęcki'
 }
-info = {
+model_input = {
     'square footage': [0], 
     'rooms' : [0], 
     'floor' : [0],
@@ -69,26 +69,25 @@ info = {
     'has_parking': [0], 
     'has_balkon': [0]
 }
-
+    
 clear_command = 'cls' if os.name == 'nt' else 'clear'
 def welcome_message():
     print("-" * 50)
     print("         Welcome to house predictor")
     print("answer few questions in order to predict the price")
     print("-" * 50)
-    time.sleep(7)
-    os.system(clear_command)
+    print("\n")
 
-if __name__ == "__main__":
-    welcome_message()
-    for text, parametr in [('What is the ', 'square footage'), ('How many ', 'rooms'), ('On what ', 'floor')]:
+def parametr_input(phrases):
+    for text, parametr in phrases:
         temp = float(input(f"{text}{parametr}: "))
         while temp < 0:
             print("This value cannot be negative! Try again.")
             temp = float(input(f"{text}{parametr}: "))
-        info[parametr] = [temp]
-        os.system(clear_command)
+        model_input[parametr] = [temp]
     os.system(clear_command)
+
+def getting_location():
     print("Chose location (just type a number):")
     for number, name in list(districts_dict.items()):
         print(f"{number}.{name}")
@@ -96,15 +95,34 @@ if __name__ == "__main__":
     while location_nbr < 1 or location_nbr > 24:
         print("You have inserted the wrong number!")
         location_nbr = int(input("YOUR ANSWER: "))
-    info[location_nbr] = [1]
+    district_name = districts_dict[location_nbr]
+    model_input[district_name] = [1]
     os.system(clear_command)
-# VALIDATION HERE !!!
-    print("Tell me if the house has (1 - YES), (0 - NO):")
-    info['has_balkon'] = int(input("A balcony? "))
-    info['has_parking'] = int(input("A parking slot? "))
-    info['has_klima'] = int(input("An airconditioner? "))
 
-    input_df = pd.DataFrame(info)
+def additional_parametr_input(phrase):
+    print("Tell me if the house has (1 - YES), (0 - NO):")
+    for text, parametr in phrase:
+        temp = int(input(f"{text}"))
+        while temp not in {0,1}:
+            print("The value should either 0 or 1")
+            temp = int(input(f"{text}"))
+        model_input[parametr] = [temp]
+
+
+if __name__ == "__main__":
+    welcome_message()
+    parametr_input(
+        [('What is the ', 'square footage'), 
+         ('How many ', 'rooms'), 
+         ('On what ', 'floor')])
+
+    getting_location()          
+    additional_parametr_input(
+        [('A balcony? ', 'has_balkon'),
+         ('A parking slot? ', 'has_parking'),
+         ('An air conditioner? ', 'has_klima')])
+
+    input_df = pd.DataFrame(model_input)
     prediction_array = engine.predict(input_df)
     estimated_price = prediction_array[0]
     print(f"The price is likely: {round(estimated_price, 2)} PLN")
