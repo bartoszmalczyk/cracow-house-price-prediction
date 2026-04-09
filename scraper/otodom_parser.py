@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 import json
 import pandas as pd
 data = []
-def parse_page(url):
+
+def get_json_data(url):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
         'Accept-Language': 'pl-PL,pl;q=0.9,en-US;q=0.8,en;q=0.7'
@@ -22,7 +23,10 @@ def parse_page(url):
         return None
 
     raw_json = json.loads(script_tag.string)
-    
+    return raw_json 
+
+def parse_page(url):    
+    raw_json = get_json_data(url)
     try:
         listings = raw_json['props']['pageProps']['data']['searchAds']['items']
     except KeyError:
@@ -32,10 +36,9 @@ def parse_page(url):
     data_list = []
     for item in listings:
         flat_data = {
-            'id': item.get('id'),
+            'slug': item.get('slug'),
             'tytul': item.get('title'),
             'cena': item.get('totalPrice', {}).get('value') if item.get('totalPrice') else None,
-            'waluta': item.get('totalPrice', {}).get('currency') if item.get('totalPrice') else None,
             'metraz': item.get('areaInSquareMeters'),
             'pokoje': item.get('roomsNumber'),
             'pietro': item.get('floorNumber'),
