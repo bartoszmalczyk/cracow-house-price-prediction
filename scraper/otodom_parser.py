@@ -56,30 +56,43 @@ def parse_offer(slug):
             return None
         
         data = raw_json['props']['pageProps']['ad']
-        details_info = data.get('target',{})
+        details_info = data.get('target', {})
         
-        build_year = details_info.get('Build_year')
-        market = details_info.get('MarketType')
-        if isinstance(build_year, list) and len(build_year) > 0:
-            build_year = build_year[0]
+        def get_first(key):
+            val = details_info.get(key)
+            return val[0] if isinstance(val, list) and len(val) > 0 else val
+
+        build_year = get_first('Build_year')
+        market = get_first('MarketType')
         extras_list = details_info.get('Extras_types', [])
+        pietro = get_first('Floor_no')
+        building_type = get_first('Building_type')
+        heating = get_first('Heating')
+        construction_status = get_first('Construction_status')
 
         photos = data.get('images', [])
 
         ans = []
         for i in photos:
             large = i.get('large')
-            if large:
-                ans.append(i.get('large'))
+            if large and "projection" not in large.lower() and "plan" not in large.lower():
+                ans.append(large)
+                
         details = {
-            'market' : market,
-            'build_year' : build_year,
-            'extras' : ",".join(extras_list) if isinstance(extras_list, list) else extras_list,
-            'photos' : ",".join(ans)
+            'market': market,
+            'build_year': build_year,
+            'pietro': pietro,
+            'type': building_type,
+            'heating': heating,
+            'stan_wykonczenia': construction_status,
+            'extras': ",".join(extras_list) if isinstance(extras_list, list) else extras_list,
+            'photos': ",".join(ans)
         }
         return details
+        
     except Exception as e:
-        print("Error occoured at: {slug}: {e}")
+        # Dodane 'f' z przodu, żeby zmienne w klamrach zadziałały
+        print(f"Error occurred at {slug}: {e}") 
         return None
     
 if __name__ == "main":

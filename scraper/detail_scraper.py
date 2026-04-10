@@ -23,10 +23,9 @@ for index in range(start, len(slugs)):
         new_details["slug"] = slug 
         df_out = pd.DataFrame([new_details])
         df_out.to_csv(OUTPUT_CSV, mode='a', index=False, header=not os.path.exists(OUTPUT_CSV))
-        df.to_csv(OUTPUT_CSV, mode = 'a', index = False, header = None)
         save_stage(index + 1, PROGRESS_FILE)
     else:
-        print("Error, slug : {slug}")
+        print(f"Error, slug : {slug}")
     time.sleep(random.uniform(3,5))
 
 
