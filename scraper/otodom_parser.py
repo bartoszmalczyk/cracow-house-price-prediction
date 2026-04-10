@@ -2,7 +2,6 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import pandas as pd
-data = []
 
 def get_json_data(url):
     headers = {
@@ -25,6 +24,7 @@ def get_json_data(url):
     raw_json = json.loads(script_tag.string)
     return raw_json 
 
+ # general info parsing  
 def parse_page(url):    
     raw_json = get_json_data(url)
     try:
@@ -45,9 +45,43 @@ def parse_page(url):
             'dzielnica': item.get('location', {}).get('reverseGeocoding', {}).get('locations', [{}])[-2].get('name', 'Brak'),
         }
         data_list.append(flat_data)
-    
     return pd.DataFrame(data_list)
 
+# single offer parsing
+def parse_offer(slug):
+    url = f"https://www.otodom.pl/pl/oferta/{slug}"
+    try:
+        raw_json = get_json_data(url)
+        if not raw_json:
+            return None
+        
+        data = raw_json['props']['pageProps']['ad']
+        details_info = data.get('target',{})
+        
+        build_year = details_info.get('Build_year')
+        market = details_info.get('MarketType')
+        if isinstance(build_year, list) and len(build_year) > 0:
+            build_year = build_year[0]
+        extras_list = details_info.get('Extras_types', [])
+
+        photos = data.get('images', [])
+
+        ans = []
+        for i in photos:
+            large = i.get('large')
+            if large:
+                ans.append(i.get('large'))
+        details = {
+            'market' : market,
+            'build_year' : build_year,
+            'extras' : ",".join(extras_list) if isinstance(extras_list, list) else extras_list,
+            'photos' : ",".join(ans)
+        }
+        return details
+    except Exception as e:
+        print("Error occoured at: {slug}: {e}")
+        return None
+    
 if __name__ == "main":
     url = "https://www.otodom.pl/pl/wyniki/sprzedaz/mieszkanie/malopolskie/krakow"
     df = parse_page(url)
