@@ -81,7 +81,6 @@ def parse_offer(slug):
         details = {
             'market': market,
             'build_year': build_year,
-            'pietro': pietro,
             'type': building_type,
             'heating': heating,
             'stan_wykonczenia': construction_status,

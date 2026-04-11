@@ -11,7 +11,7 @@ DATA_RAW_DIR = os.path.join(PROJECT_DIR, 'data', 'raw')
 os.makedirs(DATA_RAW_DIR, exist_ok=True)
 
 PROGRESS_FILE = os.path.join(BASE_DIR, 'general_last_page.txt') 
-DATA_FILE = os.path.join(DATA_RAW_DIR, 'otodom_scraped_data.csv') 
+DATA_FILE = os.path.join(DATA_RAW_DIR, 'general_data.csv') 
 
 def save_stage(page, PROGRESS_FILE):
     with open(PROGRESS_FILE, "w") as file:

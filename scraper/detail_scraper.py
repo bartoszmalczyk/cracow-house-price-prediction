@@ -7,9 +7,9 @@ from general_scraper import load_state
 from otodom_parser import parse_offer
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INPUT_CSV = os.path.join(BASE_DIR, "..", "data", "raw", "otodom_scraped_data.csv")
+INPUT_CSV = os.path.join(BASE_DIR, "..", "data", "raw", "general_data.csv")
 PROGRESS_FILE = os.path.join(BASE_DIR, 'detail_last_page.txt')
-OUTPUT_CSV = os.path.join(BASE_DIR, "..", "data", "raw", "only_details.csv")
+OUTPUT_CSV = os.path.join(BASE_DIR, "..", "data", "raw", "details_data.csv")
 
 df = pd.read_csv(INPUT_CSV)
 slugs = df["slug"]
