@@ -4,7 +4,7 @@ import folium
 import os
 import joblib
 from streamlit_folium import st_folium
-from district_cords import district_coords
+from app.district_cords import district_coords
 
 @st.cache_resource
 def load_model():
